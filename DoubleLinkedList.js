@@ -105,8 +105,8 @@ class DoubleLinkedList {
 
     //내 앞에 v 값을 넣어주세요
     pushPrev(node, v) {
-        if(node === undefined){ // node가 제대로 없다면 실행x
-            return;
+        if(node.value === undefined){ // node형식이 아니면 실행x
+            return undefined;
         }
         const newNode = new Node(v); // new (v넣기)
         newNode.next = node; // new -> node 링크
@@ -122,8 +122,8 @@ class DoubleLinkedList {
     }
     //내 뒤에 v 값을 넣어주세요
     pushNext(node, v) {
-        if(node === undefined){ // node가 제대로 없다면 실행x
-            return;
+        if(node.value === undefined){ // node형식이 아니면 실행x
+            return undefined;
         }
         const newNode = new Node(v); // new (v넣기)
         newNode.prev = node; // node <- new 연결
@@ -140,10 +140,10 @@ class DoubleLinkedList {
 
     //내 앞에 node를 지워주세요 (제거된 노드 반환, 없으면 null)
     removePrev(node) {
-        if(node === undefined){ // node가 제대로 없다면 실행x
-            return;
+        if(node.value === undefined){ // node형식이 아니면 실행x
+            return undefined;
         }
-        if(this.first === node) {// node가 first가 아닐때만 실행
+        if(node.prev !== null) {// node가 first가 아닐때만 실행
             const delNode = node.prev;
             if(this.first === delNode) {// node의 prev가 first라면?
                 node.prev = null; // x <- node (연결해제)
@@ -154,16 +154,15 @@ class DoubleLinkedList {
             }
             this.size--;
             return delNode;
-        }else{
-            return null;
         }
+        return null;
     }
     //내 뒤에 node를 지워주세요 (제거된 노드 반환, 없으면 null)
     removeNext(node) {
-        if(node === undefined){ // node가 제대로 없다면 실행x
-            return;
+        if(node.value === undefined){ // node형식이 아니면 실행x
+            return undefined;
         }
-        if(this.last === node) {// node가 last가 아닐때만 실행
+        if(node.next !== null) {// node가 last가 아닐때만 실행
             const delNode = node.next;
             if(this.last === delNode) {// node의 prev가 last라면?
                 node.next = null; // node -> x (연결해제)
@@ -174,23 +173,20 @@ class DoubleLinkedList {
             }
             this.size--;
             return delNode;
-        }else{
-            return null;
         }
+        return null;
     }
 
 
     //나를 지워주세요 (제거된 노드 반환, 없으면 null)
     remove(node) {
-        if(node === undefined){ // node가 제대로 없다면 실행x
-            return;
+        if(node.value === undefined){ // node형식이 아니면 실행x
+            return undefined;
         }
-        if(this.first === node){ // 
-            
-        }
-        if(this.end === node){
-
-        }
+        (this.first === node) ? this.first = node.next : node.prev.next = node.next; // p -> n(연결해제) node가 first면 실행X
+        (this.last === node) ? this.last = node.prev : node.next.prev = node.prev; // p <- n(연결해제) node가 last면 null이면 실행X
+        this.size--;
+        return node;
     }
 }
 
@@ -199,16 +195,3 @@ class DoubleLinkedList {
 // 1. 축약되지 않은 부분
 // 2. 틀린 부분
 // 메모하고 한 번 더 코딩해보기
-
-
-const DL1 = new DoubleLinkedList();
-
-
-DL1.append(1);
-DL1.append(2);
-DL1.append(3);
-DL1.append(4);
-DL1.append(5);
-DL1.append(7);
-DL1.pushPrev(DL1.front(),0);
-DL1.pushPrev(DL1.back(),6);
