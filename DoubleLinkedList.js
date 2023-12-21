@@ -19,16 +19,14 @@ class DoubleLinkedList {
 
     // 비었나요?
     isEmpty() {
-        return (this.size === 0) ? true : false;
+        // return (this.size === 0) ? true : false;
+        return (this.size === 0); // 시현버전 축약
     }
     // v 값을 가진 노드가 있나요? 없으면 null을 있으면 그 node를 반환해 주세요
     hasValue(v) {
         let targetNode = this.first;
-        while(targetNode.value !== v) { // 현재 node가 값이 아니면 계속 찾기
-            targetNode = targetNode.next; // 다음 노드 서치
-            if(targetNode === null){ // 다음이 없으면 정지
-                break;
-            }
+        while(targetNode?.value !== v && targetNode !== null) { // node가 v가 아니거나, null이 아니면 실행
+            targetNode = targetNode.next; // 다음 노드 대입
         }
         return targetNode; // node반환 (값 or null)
     }
@@ -102,38 +100,24 @@ class DoubleLinkedList {
         }
     }
 
-
+// 두 push는 시현이꺼 보고 수정함
     //내 앞에 v 값을 넣어주세요
     pushPrev(node, v) {
         if(node.value === undefined){ // node형식이 아니면 실행x
             return undefined;
         }
-        const newNode = new Node(v); // new (v넣기)
-        newNode.next = node; // new -> node 링크
-
-        if(this.first === node){ // first = node 였다면,
-            this.first = newNode; // first = new 로 변경
-        }else{
-            newNode.prev = node.prev; // node전 <- new
-            node.prev.next = newNode; // node전 -> new(기존해제)
-        }
+        const newNode = new Node(v, node.prev??null, node); // node앞(null) <- new -> node 연결
+        (this.first === node) ? this.first = newNode : node.prev.next = newNode; // first면 first = new, 아니면 node앞 -> new(기존해제)
         node.prev = newNode; // new <- node(기존해제)
         this.size++; // size ++
     }
-    //내 뒤에 v 값을 넣어주세요
+    // 내 뒤에 v 값을 넣어주세요
     pushNext(node, v) {
         if(node.value === undefined){ // node형식이 아니면 실행x
             return undefined;
         }
-        const newNode = new Node(v); // new (v넣기)
-        newNode.prev = node; // node <- new 연결
-
-        if(this.last === node){ // last = node 였다면,
-            this.last = newNode; // last = new 로 변경
-        }else{
-            newNode.next = node.next; // new -> node뒤
-            node.next.prev = newNode; // new <- node뒤 (기존해제)
-        }
+        const newNode = new Node(v, node, node.next??null); // node <- new -> node뒤(null) 연결
+        (this.last === node) ? this.last = newNode : node.next.prev = newNode; // last면 last = new, 아니면 new <- node뒤 (기존해제)
         node.next = newNode; // node -> new (기존해제)
         this.size++; // size ++
     }
@@ -189,6 +173,14 @@ class DoubleLinkedList {
         return node;
     }
 }
+
+
+const DL1 = new DoubleLinkedList();
+
+DL1.append(1);
+DL1.append(2);
+DL1.append(3);
+console.log(DL1.hasValue(11));
 
 
 // 다 완성하고, 시현이한테 배운거랑 비교해서,
