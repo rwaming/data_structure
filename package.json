@@ -1,0 +1,16 @@
+{
+  "name": "datastructure",
+  "version": "1.0.0",
+  "description": "",
+  "main": "DoubleLinkedList.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@jest/globals": "^29.7.0",
+    "jest": "^29.7.0"
+  }
+}
