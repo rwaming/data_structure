@@ -43,7 +43,13 @@ class DoubleLinkedList {
     //맨 뒤에 v 값을 추가해주세요
     append(v) {
         const newNode = new Node(v, this.last ?? null); // (last가 있다면) last <- new 연결
-        this.size === 0 ? (this.first = newNode) : (this.last.next = newNode); // 처음이면 first = new, 아니면 last -> new 연결
+        if (this.size === 0) {
+            // 처음이면 first = new
+            this.first = newNode;
+        } else {
+            // 아니면 last -> new 연결
+            this.last.next = newNode;
+        }
         this.last = newNode; // last = new
         this.size++; // 추가
     }
@@ -51,7 +57,13 @@ class DoubleLinkedList {
     //맨 앞에 v 값을 추가해주세요
     appendLeft(v) {
         const newNode = new Node(v, null, this.first ?? null); // (first가 있다면) new -> first 연결
-        this.size === 0 ? (this.last = newNode) : (this.first.prev = newNode); // 처음이면 last = new, 아니면 new <- first 연결
+        if (this.size === 0) {
+            // 처음이면 last = new
+            this.last = newNode;
+        } else {
+            // 아니면 new <- first 연결
+            this.first.prev = newNode;
+        }
         this.first = newNode; // first = new
         this.size++; // 추가
     }
@@ -95,7 +107,13 @@ class DoubleLinkedList {
             return undefined;
         }
         const newNode = new Node(v, node.prev ?? null, node); // node앞(null) <- new -> node 연결
-        this.first === node ? (this.first = newNode) : (node.prev.next = newNode); // first면 first = new, 아니면 node앞 -> new(링크 변경)
+        if (this.first === node) {
+            // first면 first = new
+            this.first = newNode;
+        } else {
+            // 아니면 node앞 -> new(링크 변경)
+            node.prev.next = newNode;
+        }
         node.prev = newNode; // new <- node (링크 변경)
         this.size++; // 추가
     }
@@ -107,7 +125,13 @@ class DoubleLinkedList {
             return undefined;
         }
         const newNode = new Node(v, node, node.next ?? null); // node <- new -> node뒤(null) 연결
-        this.last === node ? (this.last = newNode) : (node.next.prev = newNode); // last면 last = new, 아니면 new <- node뒤 (링크 변경)
+        if (this.last === node) {
+            // last면 last = new
+            this.last = newNode;
+        } else {
+            // 아니면 new <- node뒤 (링크 변경)
+            node.next.prev = newNode;
+        }
         node.next = newNode; // node -> new (링크 변경)
         this.size++; // 추가
     }
@@ -163,9 +187,23 @@ class DoubleLinkedList {
         if (!(node instanceof Node)) {
             // Node 인스턴스가 아니면 실행x
             return undefined;
+        } else if (this.hasValue(node.value) === null) {
+            return null;
         }
-        this.first === node ? (this.first = node.next ?? null) : (node.prev.next = node.next); // p -> n(연결해제) node가 first면 실행X
-        this.last === node ? (this.last = node.prev ?? null) : (node.next.prev = node.prev); // p <- n(연결해제) node가 last면 null이면 실행X
+        if (this.first === node) {
+            // node가 first면, first = node뒤
+            this.first = node.next;
+        } else {
+            // 아니면, node전 -> node뒤 (기존연결 해제)
+            node.prev.next = node.next;
+        }
+        if (this.last === node) {
+            // node가 last면, last = node전
+            this.last = node.prev
+        } else {
+            // 아니면, node전 <- node뒤 (기존 연결해제)
+            node.next.prev = node.prev;
+        }
         this.size--;
         return node;
     }
