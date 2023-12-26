@@ -170,3 +170,5 @@ class DoubleLinkedList {
         return node;
     }
 }
+
+module.exports = {Node, DoubleLinkedList}
